@@ -4,17 +4,44 @@ import { Link } from 'react-router-dom';
 import styles from '../styles/form.module.scss';
 
 function Signup() {
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  function handleSignup(e) {
+  async function handleSignup(e) {
     e.preventDefault();
+    const postData = {
+      username: e.target.username.value,
+      email: e.target.email.value,
+      password: e.target.password.value,
+    };
+    const response = await fetch('http://localhost:5000/users/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify(postData),
+    });
+
+    console.log(await response.json());
   }
 
   return (
     <div className={styles.formContainer}>
       <h1>Sign Up</h1>
       <form className={styles.form} onSubmit={handleSignup}>
+        <div>
+          <label htmlFor='username'>Username:</label>
+          <input
+            type='text'
+            id='username'
+            name='username'
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+        </div>
         <div>
           <label htmlFor='email'>Email:</label>
           <input
