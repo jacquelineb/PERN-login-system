@@ -39,7 +39,6 @@ function checkAuthenticated(req, res, next) {
 router.post('/register', checkNotAuthenticated, async (req, res) => {
   try {
     const { username, email, password } = req.body;
-    console.log(req.body);
 
     // some validation
     const errors = [];

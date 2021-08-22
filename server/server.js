@@ -17,7 +17,7 @@ app.use(
 );
 app.use(
   cors({
-    origin: 'http://localhost:3000', // <-- location of local react app we're connecting with
+    origin: 'http://192.168.1.77:3000', // <-- location of local react app we're connecting with
     credentials: true,
   })
 );

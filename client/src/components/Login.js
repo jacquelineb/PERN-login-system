@@ -12,7 +12,7 @@ function Login() {
       password: e.target.password.value,
     };
 
-    const response = await fetch('http://localhost:5000/users/login', {
+    const response = await fetch('http://192.168.1.77:5000/users/login', {
       method: 'POST',
       mode: 'cors',
       headers: {
@@ -21,12 +21,12 @@ function Login() {
       credentials: 'include',
       body: JSON.stringify(postData),
     });
+
     console.log(await response.json());
-    console.log(response.status);
   }
 
   async function handleLogOut() {
-    const response = await fetch('http://localhost:5000/users/logout', {
+    const response = await fetch('http://192.168.1.77:5000/users/logout', {
       method: 'DELETE',
       credentials: 'include',
     });
