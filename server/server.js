@@ -23,8 +23,11 @@ app.use(
 );
 
 // ROUTES
-const usersRouter = require('./routes/users');
-app.use('/users', usersRouter);
+const authRouter = require('./routes/auth');
+app.use('/auth', authRouter);
+
+const profileRouter = require('./routes/profile');
+app.use('/profile', profileRouter);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

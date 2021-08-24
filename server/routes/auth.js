@@ -41,37 +41,42 @@ router.post('/register', checkNotAuthenticated, async (req, res) => {
     const { username, email, password } = req.body;
 
     // some validation
-    const errors = [];
+    const errorMessages = {};
     if (!username || !email || !password) {
-      errors.push({ message: 'Please enter all fields.' });
+      errorMessages.missingFields = 'Please enter all fields.';
+    }
+
+    const existingEmail = await pool.query('SELECT id FROM blog_user WHERE email = $1', [
+      email,
+    ]);
+    if (existingEmail.rows.length > 0) {
+      errorMessages.emailTaken = 'This email is already in use.';
+    }
+
+    const existingUsername = await pool.query('SELECT id FROM blog_user WHERE username = $1', [
+      username,
+    ]);
+    if (existingUsername.rows.length > 0) {
+      errorMessages.usernameTaken = 'This username is taken.';
     }
 
     const passwordRegex = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$');
     if (!passwordRegex.test(password)) {
-      errors.push({
-        message:
-          'Please make sure password is at least 8 characters, containing a mix of numbers and uppercase and lowercase letters.',
-      });
+      errorMessages.badPassword =
+        'Please make sure password is at least 8 characters, containing a mix of numbers and uppercase and lowercase letters.';
     }
 
-    // TEST
-    const dupes = await pool.query('SELECT * FROM blog_user WHERE email= $1 OR username = $2', [
-      email,
-      username,
-    ]);
-    console.log(dupes.rows);
-
-    if (errors.length) {
-      res.json(errors);
+    if (Object.keys(errorMessages).length) {
+      res.status(401).json(errorMessages);
     } else {
-      // no errors
       const hashedPassword = await bcrypt.hash(password, 10);
       await pool.query(
         'INSERT INTO blog_user (username, email, hashed_password) VALUES ($1, $2, $3)',
         [username, email, hashedPassword]
       );
+
+      res.status(200).json('Successfully registered user');
     }
-    res.status(200).json('Successfully registered user');
   } catch (error) {
     res.status(500).json('Server error');
   }
@@ -95,32 +100,6 @@ router.delete('/logout', checkAuthenticated, (req, res) => {
   // res.redirect(somewhere) upon successfully logging in, registering, logging out, etc. But I am
   // not using Express/ejs for views, so I don't redirect anywhere I simply send a response with a
   // status.
-});
-
-// ===== Edit a user ===== //
-/*
-router.post('/', checkAuthenticated, async (req, res) => {
-  // make sure to check that the currently logged in user is only editing their own data
-});
-*/
-
-// ===== Get a user ===== //
-router.get('/:username', async (req, res) => {
-  const { username } = req.params;
-
-  try {
-    const result = await pool.query('SELECT username FROM blog_user WHERE username = $1', [
-      username,
-    ]);
-
-    if (result.rows.length > 0) {
-      res.status(200).json(result.rows[0]);
-    } else {
-      res.status(404).json('User not found');
-    }
-  } catch (error) {
-    res.status(500).json('Server Error');
-  }
 });
 
 module.exports = router;

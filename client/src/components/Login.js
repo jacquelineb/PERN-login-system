@@ -11,7 +11,7 @@ function Login() {
       password: e.target.password.value,
     };
 
-    const response = await fetch('http://192.168.1.77:5000/users/login', {
+    const response = await fetch('http://192.168.1.77:5000/auth/login', {
       method: 'POST',
       mode: 'cors',
       headers: {
@@ -25,7 +25,7 @@ function Login() {
   }
 
   async function handleLogOut() {
-    const response = await fetch('http://192.168.1.77:5000/users/logout', {
+    const response = await fetch('http://192.168.1.77:5000/auth/logout', {
       method: 'DELETE',
       credentials: 'include',
     });
