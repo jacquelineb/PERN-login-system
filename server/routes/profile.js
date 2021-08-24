@@ -19,7 +19,7 @@ router.get('/:username', async (req, res) => {
     if (user) {
       res.status(200).json(user);
     } else {
-      res.status(404).json('User not found');
+      res.status(404).json(null);
     }
   } catch (error) {
     res.status(500).json('Server Error');

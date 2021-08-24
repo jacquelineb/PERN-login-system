@@ -6,40 +6,27 @@ function UserProfile() {
   const [profile, setProfile] = useState();
 
   useEffect(() => {
-    /*
-    fetch(`http://192.168.1.77:5000/profile/${username}`)
-      .then((res) => {
-        console.log(res.status);
-        return res.json();
-      })
-      .then((data) => {
-        setProfile(data);
-      });
-      */
     async function fetchData() {
       const response = await fetch(`http://192.168.1.77:5000/profile/${username}`);
       console.log(response.status);
-      if (response.status === 200) {
-        setProfile(await response.json());
-      }
+      setProfile(await response.json());
     }
 
     fetchData();
   }, [username]);
 
-  let profileContent;
-  if (profile) {
-    profileContent = (
+  if (profile === undefined) {
+    return null;
+  } else if (profile === null) {
+    return <h1>Sorry, could not find that user.</h1>;
+  } else {
+    return (
       <>
         <h1>{profile.username}</h1>
-        <p>{profile.biography}</p>
+        {profile.biography ? <p>{profile.biography}</p> : null}
       </>
     );
-  } else {
-    profileContent = <h1>Sorry, could not find that user.</h1>;
   }
-
-  return <div>{profileContent}</div>;
 }
 
 export default UserProfile;
