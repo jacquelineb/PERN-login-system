@@ -1,56 +1,25 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import style from '../styles/NavBar.module.scss';
-import { AuthConsumer } from './AuthContext';
+import { AuthContext } from './AuthContext';
 
 function NavBar() {
-  return (
-    /*
-    <nav className={style.nav}>
-      <Link className={style.link} to='/login'>
-        LOG IN
-      </Link>
-      <Link className={style.link} to='/signup'>
-        SIGN UP
-      </Link>
-    </nav>
-    */
+  const authContext = useContext(AuthContext);
 
-    /*
-          {
-            isAuth ? (
-              <p>USERNAME</p>
-            ) : (
-              <>
-                <Link className={style.link} to='/login'>
-                  LOG IN
-                </Link>
-                <Link className={style.link} to='/signup'>
-                  SIGN UP
-                </Link>
-              </>
-            );
-          }
-          */
+  return (
     <nav className={style.nav}>
-      <AuthConsumer>
-        {({ isAuth }) => (
-          <>
-            {isAuth ? (
-              <p>USERNAME</p>
-            ) : (
-              <>
-                <Link className={style.link} to='/login'>
-                  LOG IN
-                </Link>
-                <Link className={style.link} to='/signup'>
-                  SIGN UP
-                </Link>
-              </>
-            )}
-          </>
-        )}
-      </AuthConsumer>
+      {authContext.isAuth ? (
+        <p>USERNAME</p>
+      ) : (
+        <>
+          <Link className={style.link} to='/login'>
+            LOG IN
+          </Link>
+          <Link className={style.link} to='/signup'>
+            SIGN UP
+          </Link>
+        </>
+      )}
     </nav>
   );
 }
