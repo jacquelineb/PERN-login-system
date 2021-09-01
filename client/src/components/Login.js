@@ -1,19 +1,39 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styles from '../styles/form.module.scss';
 import { Link } from 'react-router-dom';
-import { AuthContext } from './AuthContext';
 
-function Login() {
-  const authContext = useContext(AuthContext);
-
-  function handleLogIn(e) {
+function Login({ setIsAuth }) {
+  async function handleLogIn(e) {
     e.preventDefault();
-    const loginCredentials = {
+    const credentials = {
       email: e.target.email.value,
       password: e.target.password.value,
     };
 
-    authContext.logIn(loginCredentials);
+    const response = await fetch('http://localhost:5000/auth/login', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify(credentials),
+    });
+
+    if (response.status === 200) {
+      setIsAuth(true);
+    }
+  }
+
+  async function handleLogOut() {
+    const response = await fetch('http://localhost:5000/auth/logout', {
+      method: 'DELETE',
+      credentials: 'include',
+    });
+
+    if (response.status === 200) {
+      setIsAuth(false);
+    }
   }
 
   return (
@@ -35,7 +55,7 @@ function Login() {
       <p>
         Don't have an account? <Link to='/signup'>Sign up</Link>
       </p>
-      <button type='button' onClick={authContext.logOut}>
+      <button type='button' onClick={handleLogOut}>
         test logout
       </button>
     </div>

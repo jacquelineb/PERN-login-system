@@ -19,3 +19,31 @@
   }
 }
 
+.dropDownMenu {
+
+  button {
+    border-style: none;
+  }
+}
+
+
+.dropdownItems {
+  display: flex;
+  flex-direction: column;
+  width: 100px;
+  position: absolute;
+  background-color: purple;
+  text-align: left;
+
+
+  a {
+    margin: 5px;
+    text-decoration: none;
+    color: white;
+  }
+}
+
+
+
+
+
