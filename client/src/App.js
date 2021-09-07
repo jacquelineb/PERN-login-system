@@ -32,6 +32,7 @@ function App() {
           currUser={currentUser}
           setCurrUser={setCurrentUser}
         />
+
         <div className={style.mainContent}>
           <Switch>
             <Route exact path='/' component={LandingPage} />

@@ -3,7 +3,7 @@
   height: 50px;
   align-items: center;
   justify-content: right;
-  padding-right: 20px;
+  padding: 0 20px;
   background-color: grey;
 }
 
@@ -19,11 +19,13 @@
   }
 }
 
-.dropDownMenu {
+.navHome {
+  margin-right: auto;
+}
 
-  button {
-    border-style: none;
-  }
+.dropdownToggle {
+  border-style: none;
+  cursor: pointer;
 }
 
 
@@ -35,12 +37,20 @@
   background-color: purple;
   text-align: left;
 
+  &.inactive {
+    display: none;
+  }
 
   a {
     margin: 5px;
     text-decoration: none;
     color: white;
   }
+}
+
+
+.show.dropdownItems {
+  background-color: red;
 }
 
 
