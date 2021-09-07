@@ -23,15 +23,41 @@ function App() {
     localStorage.setItem('currentUser', currentUser);
   }, [isAuthenticated, currentUser]);
 
+  async function handleLogIn(credentials) {
+    const response = await fetch('http://localhost:5000/auth/login', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify(credentials),
+    });
+
+    if (response.status === 200) {
+      setIsAuthenticated(true);
+      const { user } = await response.json();
+      console.log(user);
+      setCurrentUser(user);
+    }
+  }
+
+  async function handleLogOut() {
+    const response = await fetch('http://localhost:5000/auth/logout', {
+      method: 'DELETE',
+      credentials: 'include',
+    });
+
+    if (response.status === 200) {
+      setIsAuthenticated(false);
+    }
+    console.log(await response.json());
+  }
+
   return (
     <>
       <Router>
-        <NavBar
-          isAuth={isAuthenticated}
-          setIsAuth={setIsAuthenticated}
-          currUser={currentUser}
-          setCurrUser={setCurrentUser}
-        />
+        <NavBar isAuth={isAuthenticated} currUser={currentUser} logOut={handleLogOut} />
 
         <div className={style.mainContent}>
           <Switch>
@@ -42,11 +68,7 @@ function App() {
                 isAuthenticated ? (
                   <Redirect to='/dashboard' />
                 ) : (
-                  <Login
-                    {...props}
-                    setIsAuth={setIsAuthenticated}
-                    setCurrUser={setCurrentUser}
-                  />
+                  <Login {...props} logIn={handleLogIn} />
                 )
               }
             />

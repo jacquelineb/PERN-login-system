@@ -2,48 +2,22 @@ import React from 'react';
 import styles from '../styles/form.module.scss';
 import { Link } from 'react-router-dom';
 
-function Login({ setIsAuth, setCurrUser }) {
-  async function handleLogIn(e) {
-    e.preventDefault();
-    const credentials = {
-      email: e.target.email.value,
-      password: e.target.password.value,
-    };
-
-    const response = await fetch('http://localhost:5000/auth/login', {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-      body: JSON.stringify(credentials),
-    });
-
-    if (response.status === 200) {
-      setIsAuth(true);
-      const { user } = await response.json();
-      console.log(user);
-      setCurrUser(user);
-    }
-  }
-
-  async function handleLogOut() {
-    const response = await fetch('http://localhost:5000/auth/logout', {
-      method: 'DELETE',
-      credentials: 'include',
-    });
-
-    if (response.status === 200) {
-      setIsAuth(false);
-    }
-    console.log(await response.json());
-  }
-
+function Login({ logIn }) {
   return (
     <div className={styles.formContainer}>
       <h1>Log in</h1>
-      <form className={styles.form} onSubmit={handleLogIn}>
+      <form
+        className={styles.form}
+        onSubmit={(e) => {
+          e.preventDefault();
+          const credentials = {
+            email: e.target.email.value,
+            password: e.target.password.value,
+          };
+
+          logIn(credentials);
+        }}
+      >
         <div>
           <label htmlFor='email'>Email:</label>
           <input type='email' name='email' required />
@@ -59,9 +33,6 @@ function Login({ setIsAuth, setCurrUser }) {
       <p>
         Don't have an account? <Link to='/signup'>Sign up</Link>
       </p>
-      <button type='button' onClick={handleLogOut}>
-        test logout
-      </button>
     </div>
   );
 }
