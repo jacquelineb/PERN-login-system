@@ -23,35 +23,40 @@
   margin-right: auto;
 }
 
+
+.dropdownMenuContainer {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 15px;
+  align-items: flex-end;
+}
+
 .dropdownToggle {
   border-style: none;
   cursor: pointer;
 }
 
-
-.dropdownItems {
-  display: flex;
-  flex-direction: column;
+.dropdownContent {
   width: 100px;
-  position: absolute;
   background-color: purple;
-  text-align: left;
 
   &.inactive {
     display: none;
   }
+}
 
-  a {
-    margin: 5px;
-    text-decoration: none;
-    color: white;
+.dropdownLink {
+  text-decoration: none;
+  color: rgb(228, 230, 230);
+  display: block;
+  padding: 5px;
+
+  &:hover {
+    color: rgb(255,255,255);
   }
 }
 
-
-.show.dropdownItems {
-  background-color: red;
-}
 
 
 
