@@ -37,9 +37,10 @@ function App() {
     if (response.status === 200) {
       setIsAuthenticated(true);
       const { user } = await response.json();
-      console.log(user);
       setCurrentUser(user);
     }
+
+    return response.status;
   }
 
   async function handleLogOut() {
@@ -74,11 +75,11 @@ function App() {
             />
             <Route
               path='/dashboard'
-              render={(props) => (isAuthenticated ? <Dashboard /> : <Redirect to='/login' />)}
+              render={() => (isAuthenticated ? <Dashboard /> : <Redirect to='/login' />)}
             />
             <Route
               path='/signup'
-              render={(props) => (isAuthenticated ? <Redirect to='/dashboard' /> : <Signup />)}
+              render={() => (isAuthenticated ? <Redirect to='/dashboard' /> : <Signup />)}
             />
           </Switch>
         </div>
