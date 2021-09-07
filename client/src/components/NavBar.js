@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import style from '../styles/NavBar.module.scss';
 
-function NavBar({ isAuth, setIsAuth }) {
+function NavBar({ isAuth, setIsAuth, currUser, setCurrUser }) {
   console.log(isAuth);
 
   function handleButtonClick(e) {
@@ -18,6 +18,7 @@ function NavBar({ isAuth, setIsAuth }) {
 
     if (response.status === 200) {
       setIsAuth(false);
+      setCurrUser(null);
     }
 
     window.location.reload();
@@ -28,7 +29,7 @@ function NavBar({ isAuth, setIsAuth }) {
       {isAuth ? (
         <div className={style.dropdown}>
           <button type='button' onClick={handleButtonClick}>
-            USERNAME ▼
+            {currUser} ▼
           </button>
           <div className={style.dropdownItems}>
             <Link to='/dashboard'>Dashboard</Link>

@@ -2,9 +2,9 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import Login from './components/Login';
 import Signup from './components/Signup';
 import NavBar from './components/NavBar';
-import UserProfile from './components/UserProfile';
 import Dashboard from './components/Dashboard';
 import style from './styles/App.module.scss';
+import LandingPage from './components/LandingPage';
 import { useState, useEffect } from 'react';
 
 function App() {
@@ -12,23 +12,40 @@ function App() {
     JSON.parse(localStorage.getItem('isAuthenticated')) ? true : false
   );
 
+  const [currentUser, setCurrentUser] = useState(() => {
+    const currentUser = localStorage.getItem('currentUser');
+    console.log(currentUser);
+    return currentUser ? currentUser : null;
+  });
+
   useEffect(() => {
     localStorage.setItem('isAuthenticated', isAuthenticated);
-  }, [isAuthenticated]);
+    localStorage.setItem('currentUser', currentUser);
+  }, [isAuthenticated, currentUser]);
 
   return (
     <>
       <Router>
-        <NavBar isAuth={isAuthenticated} setIsAuth={setIsAuthenticated} />
+        <NavBar
+          isAuth={isAuthenticated}
+          setIsAuth={setIsAuthenticated}
+          currUser={currentUser}
+          setCurrUser={setCurrentUser}
+        />
         <div className={style.mainContent}>
           <Switch>
+            <Route exact path='/' component={LandingPage} />
             <Route
               path='/login'
               render={(props) =>
                 isAuthenticated ? (
                   <Redirect to='/dashboard' />
                 ) : (
-                  <Login {...props} setIsAuth={setIsAuthenticated} />
+                  <Login
+                    {...props}
+                    setIsAuth={setIsAuthenticated}
+                    setCurrUser={setCurrentUser}
+                  />
                 )
               }
             />
@@ -40,7 +57,6 @@ function App() {
               path='/signup'
               render={(props) => (isAuthenticated ? <Redirect to='/dashboard' /> : <Signup />)}
             />
-            <Route path='/user/:username' component={UserProfile} />
           </Switch>
         </div>
       </Router>

@@ -2,7 +2,7 @@ import React from 'react';
 import styles from '../styles/form.module.scss';
 import { Link } from 'react-router-dom';
 
-function Login({ setIsAuth }) {
+function Login({ setIsAuth, setCurrUser }) {
   async function handleLogIn(e) {
     e.preventDefault();
     const credentials = {
@@ -22,6 +22,9 @@ function Login({ setIsAuth }) {
 
     if (response.status === 200) {
       setIsAuth(true);
+      const { user } = await response.json();
+      console.log(user);
+      setCurrUser(user);
     }
   }
 
@@ -34,6 +37,7 @@ function Login({ setIsAuth }) {
     if (response.status === 200) {
       setIsAuth(false);
     }
+    console.log(await response.json());
   }
 
   return (
