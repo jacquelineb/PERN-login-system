@@ -17,7 +17,7 @@ app.use(
 );
 app.use(
   cors({
-    origin: 'http://192.168.1.77:3000', // <-- location of local react app we're connecting with
+    origin: 'http://localhost:3000', // <-- location of local react app we're connecting with
     credentials: true,
   })
 );
@@ -25,9 +25,6 @@ app.use(
 // ROUTES
 const authRouter = require('./routes/auth');
 app.use('/auth', authRouter);
-
-const profileRouter = require('./routes/profile');
-app.use('/profile', profileRouter);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

@@ -78,13 +78,14 @@ router.post('/register', checkNotAuthenticated, async (req, res) => {
       res.status(200).json('Successfully registered user');
     }
   } catch (error) {
+    console.log(error.message);
     res.status(500).json('Server error');
   }
 });
 
 // ===== Log a user in ===== //
 router.post('/login', checkNotAuthenticated, passport.authenticate('local'), (req, res) => {
-  res.status(200).json('Login successful.');
+  res.status(200).json({ user: req.user.username });
 });
 
 // ===== Log a user out ===== //
@@ -100,6 +101,19 @@ router.delete('/logout', checkAuthenticated, (req, res) => {
   // res.redirect(somewhere) upon successfully logging in, registering, logging out, etc. But I am
   // not using Express/ejs for views, so I don't redirect anywhere I simply send a response with a
   // status.
+});
+
+router.get('/verify', (req, res) => {
+  try {
+    if (req.isAuthenticated()) {
+      console.log(req.user.username);
+      res.json({ isAuthenticated: true, user: req.user.username });
+    } else {
+      res.json({ isAuthenticated: false, user: null });
+    }
+  } catch (error) {
+    console.error(error.message);
+  }
 });
 
 module.exports = router;

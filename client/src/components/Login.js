@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styles from '../styles/form.module.scss';
 import { Link } from 'react-router-dom';
 
@@ -8,7 +8,9 @@ function Login({ logIn }) {
   return (
     <div className={styles.formContainer}>
       <h1>Log in</h1>
-      {loginError ? <p>The email or password you entered is incorrect.</p> : null}
+      {loginError ? (
+        <p className={styles.errorMsg}>The email or password you entered is incorrect.</p>
+      ) : null}
       <form
         className={styles.form}
         onSubmit={async (e) => {

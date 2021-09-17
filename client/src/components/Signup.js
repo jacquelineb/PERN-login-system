@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 //import '../styles/Signup.css';
 import styles from '../styles/form.module.scss';
 
@@ -7,6 +7,7 @@ function Signup() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState();
 
   async function handleSignup(e) {
     e.preventDefault();
@@ -24,7 +25,15 @@ function Signup() {
       body: JSON.stringify(postData),
     });
 
-    console.log(await response.json());
+    //console.log(await response.json());
+    if (response.status === 200) {
+      console.log('Successfully registered.');
+      // let user know they successfully registered
+      // then redirect page to /login
+      <Redirect to='/login' from='/signup' />;
+    } else if (response.status === 401) {
+      setErrors(await response.json());
+    }
   }
 
   return (
@@ -37,11 +46,15 @@ function Signup() {
             type='text'
             id='username'
             name='username'
+            pattern='[a-zA-Z0-9_-]+'
+            maxLength='32'
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
           />
+          {errors && errors.usernameTaken ? <p>Username already in use.</p> : null}
         </div>
+
         <div>
           <label htmlFor='email'>Email:</label>
           <input
@@ -52,6 +65,7 @@ function Signup() {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
+          {errors && errors.emailTaken ? <p>Email already in use.</p> : null}
         </div>
         <div>
           <label htmlFor='password'>Password:</label>
@@ -84,6 +98,10 @@ function Signup() {
             <span>Show password</span>
           </label>
 
+          <p>
+            Username may only contain letters (a-z, A-Z), numbers, hyphens and/or underscores.
+            (Max length of 32 characters)
+          </p>
           <p>
             Password must be at least 8 characters long, containing at least one number, one
             uppercase letter, and one lowercase letter.
