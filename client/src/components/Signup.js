@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 //import '../styles/Signup.css';
 import styles from '../styles/form.module.scss';
 
@@ -7,7 +7,9 @@ function Signup() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState();
+  const [errors, setErrors] = useState({});
+
+  let history = useHistory();
 
   async function handleSignup(e) {
     e.preventDefault();
@@ -25,12 +27,14 @@ function Signup() {
       body: JSON.stringify(postData),
     });
 
-    //console.log(await response.json());
     if (response.status === 200) {
       console.log('Successfully registered.');
-      // let user know they successfully registered
-      // then redirect page to /login
-      <Redirect to='/login' from='/signup' />;
+      history.push({
+        pathname: '/login',
+        state: {
+          redirect: true,
+        },
+      });
     } else if (response.status === 401) {
       setErrors(await response.json());
     }
